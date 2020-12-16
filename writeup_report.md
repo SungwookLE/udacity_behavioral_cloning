@@ -58,9 +58,9 @@ Second,
 Learning architecture acquired the batch dataset with shuffled, divided.
 The architecture was designed as blow (model.summary())
 * learning architecture
-
+_________________________________________________________________
 Layer (type)                 Output Shape              Param #   
-=================================================================
+_________________________________________________________________
 lambda_1 (Lambda)            (None, 160, 320, 3)       0          << 'for normalization'
 _________________________________________________________________
 cropping2d_1 (Cropping2D)    (None, 65, 320, 3)        0          << 'image shortening for memory and performance''
@@ -104,7 +104,7 @@ _________________________________________________________________
 dense_3 (Dense)              (None, 10)                510       
 _________________________________________________________________
 dense_4 (Dense)              (None, 1)                 11        
-=================================================================
+_________________________________________________________________
 Total params: 2,441,019
 Trainable params: 2,441,019
 Non-trainable params: 0
