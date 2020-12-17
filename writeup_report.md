@@ -17,13 +17,14 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/placeholder.png "Model Visualization"
-[image2]: ./examples/placeholder.png "Grayscaling"
-[image3]: ./examples/placeholder_small.png "Recovery Image"
-[image4]: ./examples/placeholder_small.png "Recovery Image"
-[image5]: ./examples/placeholder_small.png "Recovery Image"
-[image6]: ./examples/placeholder_small.png "Normal Image"
+[image1]: ./Behavior_Cloning_Architecture.jpg "Model Visualization"
+[image2]: ./wooks_data/IMG/center_2020_12_14_10_11_18_450.jpg "Gathering IMG"
+[image3]: ./wooks_data/IMG/center_2020_12_14_10_12_02_745.jpg "Recovery Image"
+[image4]: ./wooks_data/IMG/center_2020_12_14_10_12_02_667.jpg "Recovery Image"
+[image5]: ./wooks_data/IMG/center_2020_12_14_10_12_02_387.jpg "Recovery Image"
+[image6]: ./wooks_data/IMG/center_2020_12_14_10_11_22_468.jpg "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
+[video1]: ./run1.mp4 "video file"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -196,5 +197,17 @@ I finally randomly shuffled the data set and put Y% of the data into a validatio
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. 
 The ideal number of epochs was 8 as evidenced by history_object plot. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+
+### Simulation
+
+#### 1. Is the car able to navigate correctly on test data?
+
+Required: No tire may leave the drivable portion of the track surface. The car may not pop up onto ledges.
+Results: My vehicle drived smoothly, but I saw that there was a little mistake such as poping up onto ledges.
+What I need to improve: Gathering more good data, it would increase the better performance, in this case, I think if more recover driving data exists, better performance gets.
+
+![alt text][video1]
+
 
 
