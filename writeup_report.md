@@ -1,7 +1,7 @@
 # **Behavioral Cloning** 
 
 ## Writeup Template
-('20.12/16)
+('20.12/17)
 
 ---
 
@@ -24,7 +24,7 @@ The goals / steps of this project are the following:
 [image5]: ./wooks_data/IMG/center_2020_12_14_10_12_02_387.jpg "Recovery Image"
 [image6]: ./wooks_data/IMG/center_2020_12_14_10_11_22_468.jpg "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
-[video1]: ./run1.mp4 "video file"
+[video1]: ./video.mp4 "video file"
 [image8]: ./learning_epochs.png "learning loss"
 
 ## Rubric Points
