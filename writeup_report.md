@@ -25,6 +25,7 @@ The goals / steps of this project are the following:
 [image6]: ./wooks_data/IMG/center_2020_12_14_10_11_22_468.jpg "Normal Image"
 [image7]: ./examples/placeholder_small.png "Flipped Image"
 [video1]: ./run1.mp4 "video file"
+[image8]: ./learning_epochs.png "learning loss"
 
 ## Rubric Points
 ### Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/432/view) individually and describe how I addressed each point in my implementation.  
@@ -196,8 +197,9 @@ To augment the data sat, I also flipped images and angles thinking that this wou
 I finally randomly shuffled the data set and put Y% of the data into a validation set. 
 
 I used this training data for training the model. The validation set helped determine if the model was over or under fitting. 
-The ideal number of epochs was 8 as evidenced by history_object plot. I used an adam optimizer so that manually training the learning rate wasn't necessary.
+The ideal number of epochs was 5 as evidenced by history_object plot. I used an adam optimizer so that manually training the learning rate wasn't necessary.
 
+![alt text][image8]
 
 ### Simulation
 
