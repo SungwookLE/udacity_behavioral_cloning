@@ -33,9 +33,9 @@ def generator(samples, batch_size=32):
         num_samples = len(samples)
 
         while 1: #Loop forever so the generator never terminates
-                sklearn.utils.shuffle(samples)
+                sklearn.utils.shuffle(samples) #test what happen if this line comment out
                 # create adjusted steering measurements for the side camera images
-                correction = 0.25 # this is a parameter to tune
+                correction = 0.32 # this is a parameter to tune
 
                 for offset in range(0, num_samples, batch_size):
                         batch_samples = samples[offset: offset+batch_size]
@@ -142,7 +142,7 @@ history_object= model.fit_generator(train_generator,
             steps_per_epoch=math.ceil(len(train_samples)*6/batch_size), 
             validation_data=validation_generator, 
             validation_steps=math.ceil(len(validation_samples)*6/batch_size), 
-            epochs=4, verbose=1)
+            epochs=5, verbose=1)
 
 import matplotlib.pyplot as plt
 
@@ -157,8 +157,8 @@ plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
 
 # (12/14) 
-#model.save('model.h5')
+model.save('model.h6')
 model.summary()
 
-#plt.savefig('learning_epochs.png')
+plt.savefig('learning_epochs.png')
 plt.show()
