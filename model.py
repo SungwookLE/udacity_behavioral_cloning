@@ -9,6 +9,11 @@ import numpy as np
 import math
 import glob
 
+# (12/18) current session and so the state model should be removed from GPU
+# from keras import backend as K
+# K.clear_session()
+
+
 log_files = glob.glob('./data/*.csv')
 
 # (12/15) preprocess for coroutine batch
@@ -35,7 +40,7 @@ def generator(samples, batch_size=32):
         while 1: #Loop forever so the generator never terminates
                 sklearn.utils.shuffle(samples) #test what happen if this line comment out
                 # create adjusted steering measurements for the side camera images
-                correction = 0.32 # this is a parameter to tune
+                correction = 0.6 # this is a parameter to tune
 
                 for offset in range(0, num_samples, batch_size):
                         batch_samples = samples[offset: offset+batch_size]
@@ -48,27 +53,29 @@ def generator(samples, batch_size=32):
                             center_angle = float(batch_sample[3])
                             images.append(center_image)
                             measurements.append(center_angle)
-                            #flip of center cam
-                            images.append(cv2.flip(center_image,1))
-                            measurements.append(center_angle*(-1.0))
-
+                                                   
+                            if abs(center_angle) > 0.1:
+                                #flip of center cam
+                                images.append(cv2.flip(center_image,1)) 
+                                measurements.append(center_angle*(-1.0))
+                                                     
                             steering_left = center_angle + correction
                             left_name = 'data/IMG/'+batch_sample[1].split('/')[-1]
                             left_image = cv2.imread(left_name)
                             images.append(left_image)
                             measurements.append(steering_left)
-                            #flip of left cam
-                            images.append(cv2.flip(left_image,1))
-                            measurements.append(steering_left*(-1.0))
-
+#                             #flip of left cam
+#                             images.append(cv2.flip(left_image,1))
+#                             measurements.append(steering_left*(-1.0))
+                            
                             steering_right = center_angle - correction
                             right_name = 'data/IMG/'+batch_sample[2].split('/')[-1]
                             right_image = cv2.imread(right_name)
                             images.append(right_image)
                             measurements.append(steering_right)
-                            #flip of left cam
-                            images.append(cv2.flip(right_image,1))
-                            measurements.append(steering_right*(-1.0))
+#                             #flip of left cam
+#                             images.append(cv2.flip(right_image,1))
+#                             measurements.append(steering_right*(-1.0))
                             
                         X_train = np.array(images)
                         Y_train = np.array(measurements)
@@ -115,20 +122,23 @@ print('conv2d 3:\t{0}'.format(model.output_shape))
 
 model.add( Conv2D(input_shape=(9,40,48), kernel_size=(3,3), filters=64, strides=(1,1), padding='SAME') )
 model.add(Dropout(rate=0.5))
-#model.add(MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='SAME'))
+model.add(MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='SAME'))
 model.add(Activation('relu')) 
 print('conv2d 4:\t{0}'.format(model.output_shape))
 
 model.add( Conv2D(input_shape=(9,40,64), kernel_size=(3,3), filters=64, strides=(1,1), padding='SAME') )
 model.add(Dropout(rate=0.5))
-#model.add(MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='SAME'))
+model.add(MaxPooling2D(pool_size=(2,2), strides=(1,1), padding='SAME'))
 model.add(Activation('relu')) 
 print('conv2d 5:\t{0}'.format(model.output_shape))
 
 model.add(Flatten(input_shape=(90,40,64)))
 print('flatten:\t{0}'.format(model.output_shape))
 model.add(Dense(100))
+model.add(Dropout(rate=0.5))
+model.add(Activation('relu')) 
 model.add(Dense(50))
+model.add(Activation('relu')) 
 model.add(Dense(10))
 model.add(Dense(1))
 
@@ -137,12 +147,20 @@ model.compile(loss='mse', optimizer='adam')
 #(12/14) whole batch process
 #model.fit(X_train, Y_train, validation_split=0.2, shuffle = True, nb_epoch=3, verbose=1)
 
+#(12/18) callback
+import keras.callbacks
+my_callbacks = [
+    keras.callbacks.EarlyStopping(patience=2),
+    keras.callbacks.ModelCheckpoint(filepath='model.{epoch:02d}-{val_loss:.2f}.h5'),
+    keras.callbacks.TensorBoard(log_dir='./log'),
+]
+
 #(12/16) batch using generator(coroutine)
 history_object= model.fit_generator(train_generator, 
-            steps_per_epoch=math.ceil(len(train_samples)*6/batch_size), 
+            steps_per_epoch=math.ceil(len(train_samples)*4/batch_size), 
             validation_data=validation_generator, 
-            validation_steps=math.ceil(len(validation_samples)*6/batch_size), 
-            epochs=5, verbose=1)
+            validation_steps=math.ceil(len(validation_samples)*4/batch_size), 
+            epochs=10, verbose=1, callbacks=my_callbacks)
 
 import matplotlib.pyplot as plt
 
@@ -157,7 +175,7 @@ plt.xlabel('epoch')
 plt.legend(['training set', 'validation set'], loc='upper right')
 
 # (12/14) 
-model.save('model.h6')
+#model.save('model.h6')
 model.summary()
 
 plt.savefig('learning_epochs.png')
